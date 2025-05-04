@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ECommerce.Models.Order>
+@{
+    ViewData["Title"] = "訂單查詢";
+}
+
+<h1>訂單查詢</h1>
+
+<form method="get" asp-action="Query">
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label for="CustomerName" class="form-label">顧客姓名</label>
+            <input type="text" id="CustomerName" name="CustomerName" class="form-control" value="@ViewData["CustomerName"]" />
+        </div>
+        <div class="col-md-4">
+            <label for="OrderNo" class="form-label">訂單編號</label>
+            <input type="text" id="OrderNo" name="OrderNo" class="form-control" value="@ViewData["OrderNo"]" />
+        </div>
+        <div class="col-md-4">
+            <label for="StartDate" class="form-label">開始日期</label>
+            <input type="date" id="StartDate" name="StartDate" class="form-control" value="@ViewData["StartDate"]" />
+        </div>
+        <div class="col-md-4">
+            <label for="EndDate" class="form-label">結束日期</label>
+            <input type="date" id="EndDate" name="EndDate" class="form-control" value="@ViewData["EndDate"]" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">查詢</button>
+</form>
+
+<table class="table table-striped mt-4">
+    <thead>
+        <tr>
+            <th>訂單編號</th>
+            <th>客戶名稱</th>
+            <th>建立日期</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.OrderNo</td>
+                <td>@order.Customer</td>
+                <td>@order.CreateDate.ToString()</td>
+                <td>                   
+                    <a asp-action="ViewOrder" asp-route-id="@order.OrderId" class="btn btn-sm btn-info">檢視</a>
+                    <a asp-action="Edit" asp-route-id="@order.OrderId" class="btn btn-sm btn-warning">編輯</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

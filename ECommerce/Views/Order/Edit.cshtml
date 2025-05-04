@@ -1,0 +1,104 @@
+﻿@model ECommerce.Models.OrderViewModel
+
+<h2>編輯訂單</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="OrderId" />
+
+    <div class="form-group">
+        <label>訂單編號</label>
+        <input asp-for="OrderNo" class="form-control" readonly />
+    </div>
+
+    <div class="form-group">
+        <label>狀態</label>
+        <select asp-for="Status" class="form-control" asp-items="ViewBag.StatusOptions"></select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Customer">顧客姓名</label>
+        <input asp-for="Customer" class="form-control" />
+        <span asp-validation-for="Customer" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Remark">備註</label>
+        <textarea asp-for="Remark" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ShipDate">出貨日期</label>
+        <input asp-for="ShipDate" class="form-control" type="date" />
+        <span asp-validation-for="ShipDate" class="text-danger"></span>
+    </div>
+
+    <h4>訂單明細</h4>
+    <table class="table" id="orderDetailsTable">
+        <thead>
+            <tr>
+                <th>產品</th>
+                <th>數量</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.OrderDetails.Count; i++)
+            {
+                <tr>
+                   <td>
+                       <input type="hidden" asp-for="OrderDetails[@i].OrderDetailId" />
+                       <select asp-for="OrderDetails[@i].ProductId" class="form-control" asp-items="ViewBag.Products"></select>
+                       <span asp-validation-for="OrderDetails[@i].ProductId" class="text-danger"></span>
+                   </td>
+                   <td>
+                       <input asp-for="OrderDetails[@i].Quantity" class="form-control" />
+                       <span asp-validation-for="OrderDetails[@i].Quantity" class="text-danger"></span>
+                   </td>
+                   <td>
+                       <button type="button" class="btn btn-danger" onclick="removeRow(this)">刪除</button>
+                   </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-secondary" id="addDetailButton">新增明細</button>
+
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">儲存訂單</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        function addDetailRow() {
+            const tableBody = document.querySelector('#orderDetailsTable tbody');
+            const rowCount = tableBody.rows.length;
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>
+                    <select name="OrderDetails[${rowCount}].ProductId" class="form-control">
+        @foreach (var product in ViewBag.Products)
+        {
+                                    <option value="@product.Value">@product.Text</option>
+        }
+                    </select>
+                </td>
+                <td>
+                    <input name="OrderDetails[${rowCount}].Quantity" class="form-control" type="number" min="1" required />
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger" onclick="removeRow(this)">刪除</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        }
+
+        function removeRow(button) {
+            const row = button.closest('tr');
+            row.remove();
+        }
+
+        document.querySelector('#addDetailButton').addEventListener('click', addDetailRow);
+    </script>
+}
