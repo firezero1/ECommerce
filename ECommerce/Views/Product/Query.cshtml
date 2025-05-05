@@ -1,4 +1,16 @@
-﻿<table class="table mt-4">
+﻿@model IEnumerable<ECommerce.Models.Product>
+
+<h2>產品查詢</h2>
+
+<form method="get" asp-action="Query">
+    <div class="form-group">
+        <label for="searchTerm">產品名稱</label>
+        <input type="text" id="productName" name="productName" class="form-control" value="@ViewBag.ProductName" placeholder="輸入產品名稱進行查詢" />
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">查詢</button>
+</form>
+
+<table class="table mt-4">
     <thead>
         <tr>
             <th>產品編號</th>

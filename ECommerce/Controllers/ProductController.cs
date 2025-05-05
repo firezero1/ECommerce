@@ -31,16 +31,24 @@ namespace ECommerce.Controllers
             return RedirectToAction("Query");
         }
 
+        //[HttpGet]
+        //public async Task<IActionResult> Query(string productName)
+        //{
+        //    var products = await _productService.GetAllProductsAsync();
+
+        //    if (!string.IsNullOrEmpty(productName))
+        //    {
+        //        products = products.Where(p => p.ProductName.Contains(productName, StringComparison.OrdinalIgnoreCase));
+        //    }
+
+        //    return View(products);
+        //}
+
         [HttpGet]
-        public async Task<IActionResult> Query(string productName)
+        public async Task<IActionResult> Query(string? productName)
         {
-            var products = await _productService.GetAllProductsAsync();
-
-            if (!string.IsNullOrEmpty(productName))
-            {
-                products = products.Where(p => p.ProductName.Contains(productName, StringComparison.OrdinalIgnoreCase));
-            }
-
+            var products = await _productService.SearchProductsAsync(productName);
+            ViewBag.ProductName = productName; // 傳遞查詢條件到前端
             return View(products);
         }
 
