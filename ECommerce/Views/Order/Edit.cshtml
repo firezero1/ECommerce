@@ -2,7 +2,7 @@
 
 <h2>編輯訂單</h2>
 
-<form asp-action="Edit" method="post">
+<form asp-action="Edit" method="post" onsubmit="return validateForm()">
     <input type="hidden" asp-for="OrderId" />
 
     <div class="form-group">
@@ -26,12 +26,12 @@
         <textarea asp-for="Remark" class="form-control"></textarea>
     </div>
 
-    <div class="form-group">
+    <div class="form-group col-md-2">
         <label asp-for="ShipDate">出貨日期</label>
         <input asp-for="ShipDate" class="form-control" type="date" />
         <span asp-validation-for="ShipDate" class="text-danger"></span>
     </div>
-
+    <br />
     <h4>訂單明細</h4>
     <table class="table" id="orderDetailsTable">
         <thead>
@@ -61,26 +61,28 @@
             }
         </tbody>
     </table>
-    <button type="button" class="btn btn-secondary" id="addDetailButton">新增明細</button>
+    <button type="button" class="btn btn-warning" id="addDetailButton">新增明細</button>
 
     <div class="mt-3">
         <button type="submit" class="btn btn-primary">儲存訂單</button>
+        <a asp-action="Query" class="btn btn-secondary">返回</a>
     </div>
 </form>
 
 @section Scripts {
     <script>
-        function addDetailRow() {
+           function addDetailRow() {
             const tableBody = document.querySelector('#orderDetailsTable tbody');
             const rowCount = tableBody.rows.length;
 
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>
-                    <select name="OrderDetails[${rowCount}].ProductId" class="form-control">
+                    <select name="OrderDetails[${rowCount}].ProductId" class="form-control" onchange="checkDuplicateProduct(this)">
+                        <option value="">請選擇</option>
         @foreach (var product in ViewBag.Products)
         {
-                                    <option value="@product.Value">@product.Text</option>
+                                <option value="@product.Value">@product.Text</option>
         }
                     </select>
                 </td>
@@ -97,6 +99,31 @@
         function removeRow(button) {
             const row = button.closest('tr');
             row.remove();
+        }
+
+         function checkDuplicateProduct(selectElement) {
+            const selectedValue = selectElement.value;
+            const tableBody = document.querySelector('#orderDetailsTable tbody');
+            const existingProductIds = Array.from(tableBody.querySelectorAll('select[name^="OrderDetails"]'))
+                .filter(select => select !== selectElement)
+                .map(select => select.value);
+
+            if (existingProductIds.includes(selectedValue)) {
+                alert('不可選擇相同產品');
+                selectElement.value = ''; // Reset the selection
+            }
+        }
+
+         function validateForm() {
+            const tableBody = document.querySelector('#orderDetailsTable tbody');
+            const productSelects = tableBody.querySelectorAll('select[name^="OrderDetails"]');
+            for (const select of productSelects) {
+                if (!select.value) {
+                    alert('所有明細的產品欄位不可為空');
+                    return false;
+                }
+            }
+            return true;
         }
 
         document.querySelector('#addDetailButton').addEventListener('click', addDetailRow);

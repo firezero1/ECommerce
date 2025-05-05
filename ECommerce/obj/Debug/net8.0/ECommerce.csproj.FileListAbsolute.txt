@@ -160,3 +160,4 @@ C:\Users\ZZ01M4858\Desktop\D_Disk\VS_Project\ECommerce\ECommerce\obj\Debug\net8.
 C:\Users\ZZ01M4858\Desktop\D_Disk\VS_Project\ECommerce\ECommerce\obj\Debug\net8.0\ECommerce.genruntimeconfig.cache
 C:\Users\ZZ01M4858\Desktop\D_Disk\VS_Project\ECommerce\ECommerce\obj\Debug\net8.0\ref\ECommerce.dll
 C:\Users\ZZ01M4858\Desktop\D_Disk\VS_Project\ECommerce\ECommerce\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\ZZ01M4858\Desktop\D_Disk\VS_Project\ECommerce\ECommerce\obj\Debug\net8.0\ECommerce.sourcelink.json

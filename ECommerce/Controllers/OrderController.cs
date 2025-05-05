@@ -23,7 +23,7 @@ namespace ECommerce.Controllers
             {
                 OrderDetails = new List<OrderDetailViewModel>
                 {
-                    new OrderDetailViewModel() // 預設一筆空的訂單明細
+                    
                 }
             };
 
